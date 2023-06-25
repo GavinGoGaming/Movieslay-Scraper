@@ -1,0 +1,32 @@
+{
+  "name": "movieslay-scraper",
+  "version": "1.0.0",
+  "description": "Movieslay's web scraper",
+  "main": "index.js",
+  "scripts": {
+    "test": "node .",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klashdevelopment/Movieslay-Scraper.git"
+  },
+  "keywords": [
+    "movies",
+    "pirate"
+  ],
+  "author": "GavinGoGaming",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/klashdevelopment/Movieslay-Scraper/issues"
+  },
+  "homepage": "https://github.com/klashdevelopment/Movieslay-Scraper#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "puppeteer": "^20.7.3"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.2.16"
+  }
+}

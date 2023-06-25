@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movieslay Scraper</title>
+    <link rel="stylesheet" href="https://gtml.fly.dev/regular-ass-style.css">
+    <style>
+        center {
+            margin-left: 10vw;
+            margin-right: 10vw;
+        }
+        div {
+            border: 1px solid white;
+            border-radius: 10px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+    <h1>Movieslay Scraper</h1>
+    <h3>Add your own movie to Movieslay.</h3>
+    <h5>Once complete with your JSON file, please upload it to the discord (mentioned on the movieslay homepage)</h5>
+    Movie Title: <input type="text" placeholder="Spider-Man: Into the Spider-Verse..." id="title"><br>
+    Movie year: <input type="number" placeholder="2023" id="year"><br>
+    IMDB Link: <input type="url" value="https://imdb.com/title/" id="imdb"><br>
+    Thumbnail link: <input type="url" name="Thumbnail" id="thumb"><br>
+    Custom HTML? <input type="checkbox" name="chtml" id="chtml"><br>
+    <div id="chtmlbox" style="display: none;">
+        Custom HTML: <input type="text" id="chtmlip"><br>
+    </div>
+    <div id="torbox">
+        Custom Magnet? <input type="checkbox" name="cmag" id="cmag"><br>
+        <div id="cmagbox" style="display: none;">
+            Magnet: <input type="text" id="cmagvalue"><br>
+        </div>
+        <div id="webtorbox">
+            <h5>Webtor URL Unknown? See <a href="https://torrentz2.nz">torrentz2</a> and then scroll to the webtor box once you click a torrent. Then, click download on webtor and paste the url here.</h5>
+            Webtor URL (/#/show/ url): <input type="text" id="webtorurl" placeholder="https://webtor.io/#/show"><br>
+        </div>
+    </div>
+    <button>do the magic</button>
+
+    <script>
+        var chtml = document.querySelector('#chtml'),
+        chtmlbox = document.querySelector('#chtmlbox'),
+        chtmlinput = document.querySelector('#chtmlip'),
+        cmag = document.querySelector('#cmag'),
+        cmagval = document.querySelector('#cmagvalue'),
+        cmagbox = document.querySelector('#cmagbox'),
+        webtorbox = document.querySelector('#webtorbox'),
+        webtorurl = document.querySelector('#webtorurl'),
+        torbox = document.querySelector('#torbox'),
+        title = document.querySelector('#title'),
+        year = document.querySelector('#year'),
+        imdb = document.querySelector('#imdb');
+
+        chtml.addEventListener('change', ()=>{
+            torbox.style.display = chtml.checked ? 'none' : 'block';
+            chtmlbox.style.display = chtml.checked ? 'block' : 'none';
+        });
+        
+
+        cmag.addEventListener('change', ()=>{
+            webtorbox.style.display = cmag.checked ? 'none' : 'block';
+            cmagbox.style.display = cmag.checked ? 'block' : 'none';
+        });
+
+        document.querySelector('button').addEventListener('click', async ()=>{
+            // GENERATE
+            var data = cmag.checked ? {} : (await (await fetch('/get',{method:"POST",body:JSON.stringify({url: webtorurl.value}),headers:{'Content-Type':'application/json'}})).json());
+            var json = {
+                "title": title.value,
+                "year": year.value,
+                "imdb": imdb.value,
+                "download": cmag.checked ? `javascript:(prompt("Download using the magnet (open in brave)", "${cmagval.value}"))` : data.dl,
+                "thumbnail": document.querySelector('#thumb').value,
+                "htmlEmbedContent": chtml.checked ? chtmlinput.value : "_UT",
+                "torrent": cmag.checked ? cmagval.value : data.magnet,
+                "file": title.value.replace(/ /g, '-').replace(/[^a-zA-Z0-9-]/g, '').toLowerCase()
+            }
+            console.log(json);
+            document.body.innerHTML = JSON.stringify(json);
+        })
+    </script>
+    </center>
+</body>
+</html>
